@@ -432,6 +432,11 @@ namespace YimMenu
 			GameSkeletonUpdate = addr.As<PVOID>();
 		});
 
+		static constexpr auto catalogUnpackerPtrn = Pattern<"41 57 41 56 41 55 41 54 56 57 55 53 48 81 EC E8 00 00 00 0F 29 B4 24 ? ? ? ? 4C 89 44 24">("CatalogUnpacker");
+		scanner.Add(catalogUnpackerPtrn, [this](PointerCalculator addr) {
+			CatalogUnpacker = addr.As<PVOID>();
+		});
+
 		if (!scanner.Scan())
 		{
 			LOG(FATAL) << "Some patterns could not be found, unloading.";

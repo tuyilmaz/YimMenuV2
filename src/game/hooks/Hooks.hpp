@@ -37,6 +37,9 @@ namespace YimMenu::Hooks
 	{
 		extern void QueueDependency(__int64 a1);
 		extern void GameSkeletonUpdate(rage::gameSkeleton* skeleton, int type);
+		extern std::int64_t CatalogUnpacker(std::int64_t context, void* document, std::int32_t* out_size);
+		extern void RequestCatalogDump();
+		extern bool SerializeCatalogJson(void* document, const char* output_path);
 		extern bool PrepareMetricForSending(rage::JsonSerializer* ser, bool* failed, char* a3, uint64_t time, rage::rlMetric* metric);
 		extern BOOL GetThreadContext(HANDLE hThread, LPCONTEXT lpContext);
 		extern void HttpStartRequest(void* request);

@@ -164,6 +164,7 @@ namespace YimMenu
 		PVOID MatchmakingUnadvertise;
 		PVOID MatchmakingSessionDetailSendResponse;
 		PVOID GameSkeletonUpdate;
+		PVOID CatalogUnpacker;
 	};
 
 	struct Pointers : PointerData

@@ -11,7 +11,7 @@ using FnGetVersion = int (*)();
 using FnLocalSaves = bool (*)();
 using FnBattlEyeBypass = bool (*)();
 
-#define RESTORE_DESTROYED_FUNCTIONS true
+#define RESTORE_DESTROYED_FUNCTIONS false
 
 namespace YimMenu
 {
