@@ -34,7 +34,7 @@ namespace YimMenu
 		const auto documents = std::filesystem::path(std::getenv("appdata")) / "YimMenuV2";
 		FileMgr::Init(documents);
 
-		LogHelper::Init("YimMenuV2", FileMgr::GetProjectFile("./cout.log"));
+		LogHelper::Init("YimMenuV2", FileMgr::GetProjectFile("./cout.log"), false);
 
 		LOGF(INFO, "Welcome to YimMenuV2! Build date: {} at {}", __DATE__, __TIME__);
 
