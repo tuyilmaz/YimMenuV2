@@ -85,6 +85,7 @@ namespace YimMenu
 		Functions::GetNetPlayerFromPid GetNetPlayerFromPid;
 		bool* IsSessionStarted;
 		PVOID AssignPhysicalIndex;
+		PVOID NetworkPlayerMgrInit;
 		PVOID NetworkPlayerMgrShutdown;
 		Functions::TriggerWeaponDamageEvent TriggerWeaponDamageEvent;
 		rage::scrProgram** ScriptPrograms;

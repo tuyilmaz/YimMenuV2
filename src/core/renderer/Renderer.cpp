@@ -203,6 +203,7 @@ namespace YimMenu
 				m_FontsUpdated = false;
             }
 
+			GUI::ToggleMouse();
 			ImGui_ImplDX12_NewFrame();
 			ImGui_ImplWin32_NewFrame();
 			ImGui::NewFrame();

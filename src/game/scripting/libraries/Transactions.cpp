@@ -11,20 +11,20 @@
 
 namespace YimMenu::Lua
 {
-	// TODO: use __gc and a std::vector
+	struct BasketItem
+	{
+		std::uint32_t m_PrimaryItem;
+		std::uint32_t m_SecondaryItem;
+		int m_Value;
+		int m_StatValue;
+		int m_Quantity;
+	};
+
 	struct BasketTransaction
 	{
 		std::uint32_t m_Category;
 		std::uint32_t m_Action;
-		struct
-		{
-			std::uint32_t m_PrimaryItem;
-			std::uint32_t m_SecondaryItem;
-			int m_Value;
-			int m_StatValue;
-			int m_Quantity;
-		} m_Items[70];
-		int m_NumItems;
+		std::vector<BasketItem> m_Items;
 	};
 
 	const std::unordered_set<std::uint32_t> BANNED_SERVICES =
@@ -70,18 +70,17 @@ namespace YimMenu::Lua
 		{
 			auto& transaction = GetObject<BasketTransaction>(state, 1);
 
-			if (transaction.m_NumItems >= 70)
+			if (transaction.m_Items.size() >= 70)
 				luaL_error(state, "Too many items in basket");
 
-			auto& item = transaction.m_Items[transaction.m_NumItems];
-
+			BasketItem item{};
 			item.m_PrimaryItem = GetHashArgument(state, 2);
 			item.m_SecondaryItem = GetSecondaryItem(state, 3);
 			item.m_Value = luaL_checkinteger(state, 4);
 			item.m_StatValue = luaL_checkinteger(state, 5);
 			item.m_Quantity = luaL_checkinteger(state, 6);
 
-			transaction.m_NumItems++;
+			transaction.m_Items.push_back(item);
 
 			return 0;
 		}
@@ -103,10 +102,8 @@ namespace YimMenu::Lua
 					return;
 				}
 
-				for (int i = 0; i < basket.m_NumItems; i++)
+				for (const auto& item : basket.m_Items)
 				{
-					auto item = basket.m_Items[i];
-
 					struct NETSHOPPING_BASKET_ITEM
 					{
 						SCR_HASH PrimaryHash;
@@ -165,7 +162,7 @@ namespace YimMenu::Lua
 
 			transaction->m_Category = category;
 			transaction->m_Action = action;
-			transaction->m_NumItems = 0;
+			transaction->m_Items = {};
 
 			return 1;
 		}
@@ -221,10 +218,19 @@ namespace YimMenu::Lua
 			return 1;
 		}
 
+		static int GC(lua_State* state)
+		{
+			auto& self = GetObject<BasketTransaction>(state, 1);
+			self.~BasketTransaction();
+			return 0;
+		}
+
 		virtual void Register(lua_State* state) override
 		{
 			luaL_newmetatable(state, "BasketTransaction");
 			{
+				SetFunction(state, GC, "__gc");
+
 				lua_newtable(state);
 				{
 					SetFunction(state, BasketAddItem, "add_item");
